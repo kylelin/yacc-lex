@@ -1,0 +1,6 @@
+lexとyaccプログラムでC言語のif文の解析
+
+コンパイル方法
+1. flex -l def.l
+2. bison -dv -y def.y
+3. gcc -o example y.tab.c lex.yy.c

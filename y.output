@@ -1,0 +1,352 @@
+Grammar
+
+    0 $accept: IF_STATEMENT $end
+
+    1 IF_STATEMENT: IF LEFT_PARENTHESIS EXPRESSION RIGHT_PARENTHESIS BLOCK
+
+    2 BLOCK: STATEMENT
+    3      | LEFT_BRACE STATEMENT_LIST RIGHT_BRACE
+
+    4 STATEMENT_LIST: STATEMENT
+    5               | STATEMENT_LIST STATEMENT
+
+    6 STATEMENT: EXPRESSION SEMICOLON
+    7          | TYPENAME VARIABLE_LIST SEMICOLON
+
+    8 VARIABLE_LIST: IDENTIFIER
+    9              | VARIABLE_LIST COMMA IDENTIFIER
+
+   10 EXPRESSION: TERM
+   11           | LEFT_PARENTHESIS EXPRESSION RIGHT_PARENTHESIS
+   12           | EXPRESSION OPERATOR TERM
+
+   13 TERM: INTEGER
+   14     | REAL
+   15     | HEXADECIMAL
+   16     | IDENTIFIER
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+LEFT_PARENTHESIS (258) 1 11
+RIGHT_PARENTHESIS (259) 1 11
+LEFT_BRACE (260) 3
+RIGHT_BRACE (261) 3
+SEMICOLON (262) 6 7
+COMMA (263) 9
+IF (264) 1
+OPERATOR (265) 12
+TYPENAME (266) 7
+INTEGER (267) 13
+REAL (268) 14
+HEXADECIMAL (269) 15
+IDENTIFIER (270) 8 9 16
+
+
+Nonterminals, with rules where they appear
+
+$accept (16)
+    on left: 0
+IF_STATEMENT (17)
+    on left: 1, on right: 0
+BLOCK (18)
+    on left: 2 3, on right: 1
+STATEMENT_LIST (19)
+    on left: 4 5, on right: 3 5
+STATEMENT (20)
+    on left: 6 7, on right: 2 4 5
+VARIABLE_LIST (21)
+    on left: 8 9, on right: 7 9
+EXPRESSION (22)
+    on left: 10 11 12, on right: 1 6 11 12
+TERM (23)
+    on left: 13 14 15 16, on right: 10 12
+
+
+state 0
+
+    0 $accept: . IF_STATEMENT $end
+
+    IF  shift, and go to state 1
+
+    IF_STATEMENT  go to state 2
+
+
+state 1
+
+    1 IF_STATEMENT: IF . LEFT_PARENTHESIS EXPRESSION RIGHT_PARENTHESIS BLOCK
+
+    LEFT_PARENTHESIS  shift, and go to state 3
+
+
+state 2
+
+    0 $accept: IF_STATEMENT . $end
+
+    $end  shift, and go to state 4
+
+
+state 3
+
+    1 IF_STATEMENT: IF LEFT_PARENTHESIS . EXPRESSION RIGHT_PARENTHESIS BLOCK
+
+    LEFT_PARENTHESIS  shift, and go to state 5
+    INTEGER           shift, and go to state 6
+    REAL              shift, and go to state 7
+    HEXADECIMAL       shift, and go to state 8
+    IDENTIFIER        shift, and go to state 9
+
+    EXPRESSION  go to state 10
+    TERM        go to state 11
+
+
+state 4
+
+    0 $accept: IF_STATEMENT $end .
+
+    $default  accept
+
+
+state 5
+
+   11 EXPRESSION: LEFT_PARENTHESIS . EXPRESSION RIGHT_PARENTHESIS
+
+    LEFT_PARENTHESIS  shift, and go to state 5
+    INTEGER           shift, and go to state 6
+    REAL              shift, and go to state 7
+    HEXADECIMAL       shift, and go to state 8
+    IDENTIFIER        shift, and go to state 9
+
+    EXPRESSION  go to state 12
+    TERM        go to state 11
+
+
+state 6
+
+   13 TERM: INTEGER .
+
+    $default  reduce using rule 13 (TERM)
+
+
+state 7
+
+   14 TERM: REAL .
+
+    $default  reduce using rule 14 (TERM)
+
+
+state 8
+
+   15 TERM: HEXADECIMAL .
+
+    $default  reduce using rule 15 (TERM)
+
+
+state 9
+
+   16 TERM: IDENTIFIER .
+
+    $default  reduce using rule 16 (TERM)
+
+
+state 10
+
+    1 IF_STATEMENT: IF LEFT_PARENTHESIS EXPRESSION . RIGHT_PARENTHESIS BLOCK
+   12 EXPRESSION: EXPRESSION . OPERATOR TERM
+
+    RIGHT_PARENTHESIS  shift, and go to state 13
+    OPERATOR           shift, and go to state 14
+
+
+state 11
+
+   10 EXPRESSION: TERM .
+
+    $default  reduce using rule 10 (EXPRESSION)
+
+
+state 12
+
+   11 EXPRESSION: LEFT_PARENTHESIS EXPRESSION . RIGHT_PARENTHESIS
+   12           | EXPRESSION . OPERATOR TERM
+
+    RIGHT_PARENTHESIS  shift, and go to state 15
+    OPERATOR           shift, and go to state 14
+
+
+state 13
+
+    1 IF_STATEMENT: IF LEFT_PARENTHESIS EXPRESSION RIGHT_PARENTHESIS . BLOCK
+
+    LEFT_PARENTHESIS  shift, and go to state 5
+    LEFT_BRACE        shift, and go to state 16
+    TYPENAME          shift, and go to state 17
+    INTEGER           shift, and go to state 6
+    REAL              shift, and go to state 7
+    HEXADECIMAL       shift, and go to state 8
+    IDENTIFIER        shift, and go to state 9
+
+    BLOCK       go to state 18
+    STATEMENT   go to state 19
+    EXPRESSION  go to state 20
+    TERM        go to state 11
+
+
+state 14
+
+   12 EXPRESSION: EXPRESSION OPERATOR . TERM
+
+    INTEGER      shift, and go to state 6
+    REAL         shift, and go to state 7
+    HEXADECIMAL  shift, and go to state 8
+    IDENTIFIER   shift, and go to state 9
+
+    TERM  go to state 21
+
+
+state 15
+
+   11 EXPRESSION: LEFT_PARENTHESIS EXPRESSION RIGHT_PARENTHESIS .
+
+    $default  reduce using rule 11 (EXPRESSION)
+
+
+state 16
+
+    3 BLOCK: LEFT_BRACE . STATEMENT_LIST RIGHT_BRACE
+
+    LEFT_PARENTHESIS  shift, and go to state 5
+    TYPENAME          shift, and go to state 17
+    INTEGER           shift, and go to state 6
+    REAL              shift, and go to state 7
+    HEXADECIMAL       shift, and go to state 8
+    IDENTIFIER        shift, and go to state 9
+
+    STATEMENT_LIST  go to state 22
+    STATEMENT       go to state 23
+    EXPRESSION      go to state 20
+    TERM            go to state 11
+
+
+state 17
+
+    7 STATEMENT: TYPENAME . VARIABLE_LIST SEMICOLON
+
+    IDENTIFIER  shift, and go to state 24
+
+    VARIABLE_LIST  go to state 25
+
+
+state 18
+
+    1 IF_STATEMENT: IF LEFT_PARENTHESIS EXPRESSION RIGHT_PARENTHESIS BLOCK .
+
+    $default  reduce using rule 1 (IF_STATEMENT)
+
+
+state 19
+
+    2 BLOCK: STATEMENT .
+
+    $default  reduce using rule 2 (BLOCK)
+
+
+state 20
+
+    6 STATEMENT: EXPRESSION . SEMICOLON
+   12 EXPRESSION: EXPRESSION . OPERATOR TERM
+
+    SEMICOLON  shift, and go to state 26
+    OPERATOR   shift, and go to state 14
+
+
+state 21
+
+   12 EXPRESSION: EXPRESSION OPERATOR TERM .
+
+    $default  reduce using rule 12 (EXPRESSION)
+
+
+state 22
+
+    3 BLOCK: LEFT_BRACE STATEMENT_LIST . RIGHT_BRACE
+    5 STATEMENT_LIST: STATEMENT_LIST . STATEMENT
+
+    LEFT_PARENTHESIS  shift, and go to state 5
+    RIGHT_BRACE       shift, and go to state 27
+    TYPENAME          shift, and go to state 17
+    INTEGER           shift, and go to state 6
+    REAL              shift, and go to state 7
+    HEXADECIMAL       shift, and go to state 8
+    IDENTIFIER        shift, and go to state 9
+
+    STATEMENT   go to state 28
+    EXPRESSION  go to state 20
+    TERM        go to state 11
+
+
+state 23
+
+    4 STATEMENT_LIST: STATEMENT .
+
+    $default  reduce using rule 4 (STATEMENT_LIST)
+
+
+state 24
+
+    8 VARIABLE_LIST: IDENTIFIER .
+
+    $default  reduce using rule 8 (VARIABLE_LIST)
+
+
+state 25
+
+    7 STATEMENT: TYPENAME VARIABLE_LIST . SEMICOLON
+    9 VARIABLE_LIST: VARIABLE_LIST . COMMA IDENTIFIER
+
+    SEMICOLON  shift, and go to state 29
+    COMMA      shift, and go to state 30
+
+
+state 26
+
+    6 STATEMENT: EXPRESSION SEMICOLON .
+
+    $default  reduce using rule 6 (STATEMENT)
+
+
+state 27
+
+    3 BLOCK: LEFT_BRACE STATEMENT_LIST RIGHT_BRACE .
+
+    $default  reduce using rule 3 (BLOCK)
+
+
+state 28
+
+    5 STATEMENT_LIST: STATEMENT_LIST STATEMENT .
+
+    $default  reduce using rule 5 (STATEMENT_LIST)
+
+
+state 29
+
+    7 STATEMENT: TYPENAME VARIABLE_LIST SEMICOLON .
+
+    $default  reduce using rule 7 (STATEMENT)
+
+
+state 30
+
+    9 VARIABLE_LIST: VARIABLE_LIST COMMA . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 31
+
+
+state 31
+
+    9 VARIABLE_LIST: VARIABLE_LIST COMMA IDENTIFIER .
+
+    $default  reduce using rule 9 (VARIABLE_LIST)
