@@ -4,7 +4,7 @@ lexとyaccプログラムでC言語の解析
 フォルダー「c_if」
 C言語のif文の解析
 
-フォルダー「c_func」
+フォルダー「c_while_if」
 C言語のifとwhilen文の解析
 
 コンパイル方法
