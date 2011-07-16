@@ -1,4 +1,11 @@
-lexとyaccプログラムでC言語のif文の解析
+lexとyaccプログラムでC言語の解析
+
+ソース
+フォルダー「c_if」
+C言語のif文の解析
+
+フォルダー「c_func」
+C言語のifとwhilen文の解析
 
 コンパイル方法
 1. flex -l def.l
